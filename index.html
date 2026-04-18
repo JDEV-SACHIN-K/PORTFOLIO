@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sachin Kumar — Backend Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#02000a;
+  --bg2:#0a001a;
+  --surface:#0d0d12;
+  --surface2:#13131f;
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.13);
+  --text:#e2e2f0;
+  --muted:#6a6a8a;
+  --cyan:#00f0ff;
+  --purple:#a855f7;
+  --green:#34d399;
+  --orange:#fb923c;
+  --mono:'Space Mono',monospace;
+  --sans:'Syne',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased}
+::selection{background:rgba(0,240,255,0.2);color:#fff}
+#cosmos{position:fixed;inset:0;z-index:0;pointer-events:none}
+#cursor{position:fixed;top:0;left:0;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--cyan);background:rgba(0,240,255,0.06);box-shadow:0 0 12px rgba(0,240,255,0.4);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .22s,height .22s,background .22s,border-color .22s,box-shadow .22s;mix-blend-mode:screen}
+#cursor.big{width:44px;height:44px;border-color:var(--purple);background:rgba(168,85,247,0.12);box-shadow:0 0 18px rgba(168,85,247,0.5)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.4rem 3rem;display:flex;align-items:center;justify-content:space-between;background:rgba(2,0,10,0.65);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--mono);font-size:1.15rem;font-weight:700;background:linear-gradient(90deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-family:var(--mono);font-size:.67rem;color:var(--muted);text-decoration:none;letter-spacing:.12em;text-transform:uppercase;position:relative;transition:color .2s}
+.nav-links a::after{content:'';position:absolute;bottom:-.35rem;left:0;width:0;height:1.5px;background:var(--cyan);transition:width .3s}
+.nav-links a:hover{color:var(--cyan)}
+.nav-links a:hover::after{width:100%}
+section{position:relative;z-index:2}
+.container{max-width:1120px;margin:0 auto;padding:0 2.5rem}
+
+#home{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:7rem 0 4rem;text-align:center}
+.hero-layout{display:flex;align-items:center;justify-content:center;gap:3rem;width:100%;max-width:1400px;padding:0 2rem}
+.hero-wrap{flex:1;max-width:700px;z-index:5}
+
+/* NEW SIDE TERMINALS WITH SCROLLING CONTENT */
+.side-terminal{flex:0 0 280px;background:rgba(13,13,18,0.6);border:1px solid var(--border);border-radius:8px;padding:1rem;font-family:var(--mono);font-size:.6rem;color:var(--muted);text-align:left;height:240px;overflow:hidden;position:relative;backdrop-filter:blur(4px);display:block}
+.side-terminal::before{content:attr(data-label);position:absolute;top:0;right:10px;font-size:10px;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:1px}
+.terminal-content{animation:scroll-up 15s linear infinite}
+@keyframes scroll-up{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
+
+.side-terminal.left{animation:float-soft 6s ease-in-out infinite}
+.side-terminal.right{animation:float-soft 6s ease-in-out infinite reverse}
+@keyframes float-soft{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+
+.terminal-box{background:rgba(13,13,18,0.88);border:1px solid var(--border2);border-radius:10px;overflow:hidden;margin:0 auto 2.5rem;box-shadow:0 0 60px rgba(0,0,0,0.6);backdrop-filter:blur(8px);max-width:500px}
+.terminal-header{display:flex;align-items:center;gap:.5rem;padding:.7rem 1rem;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.3)}
+.dot{width:11px;height:11px;border-radius:50%}
+.dr{background:#ff5f57}.dy{background:#ffbd2e}.dg{background:#28c841}
+.terminal-body{padding:1rem 1.25rem;font-family:var(--mono);font-size:.82rem;color:var(--cyan);line-height:1.8;min-height:7rem;text-align:left}
+#typed-cursor{animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+
+.hero-name{font-size:clamp(3.8rem,9vw,7.5rem);font-weight:700;letter-spacing:-.03em;line-height:.95;color:#fff;margin-bottom:.6rem;text-align:center}
+.hero-name .grad{background:linear-gradient(135deg,var(--cyan) 0%,#3b82f6 50%,var(--purple) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:1.05rem;color:var(--muted);max-width:520px;line-height:1.85;margin:0 auto 2.5rem;font-weight:400}
+.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+.btn-prim{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border-radius:8px;background:rgba(0,240,255,0.08);border:1px solid rgba(0,240,255,0.4);color:var(--cyan);font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;font-weight:700;transition:background .25s,box-shadow .25s,color .25s,transform .2s}
+.btn-prim:hover{background:var(--cyan);color:#000;box-shadow:0 0 30px rgba(0,240,255,0.35);transform:translateY(-2px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border-radius:8px;border:1px solid var(--border2);color:var(--muted);font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;transition:border-color .25s,color .25s}
+.btn-ghost:hover{border-color:var(--purple);color:var(--purple)}
+.chevron{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);color:var(--cyan);opacity:.55;animation:bounce 2s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(10px)}}
+
+.marquee-wrap{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:.85rem 0;background:rgba(13,13,18,0.5);position:relative;z-index:2}
+.marquee-track{display:flex;gap:2.5rem;animation:marquee 28s linear infinite;width:max-content}
+.mq-item{font-family:var(--mono);font-size:.7rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;display:flex;align-items:center;gap:.75rem}
+.mq-item::before{content:'◈';color:var(--cyan);font-size:.6rem}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+.sec-label{font-family:var(--mono);font-size:.68rem;color:var(--cyan);letter-spacing:.22em;text-transform:uppercase;display:flex;align-items:center;gap:.75rem;margin-bottom:1rem}
+.sec-label.grn{color:var(--green)}
+
+.sec-title{font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-bottom:1rem}
+#about{padding:7rem 0;min-height:80vh;display:flex;align-items:center}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.code-block{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:2rem;font-family:var(--mono);font-size:.83rem;line-height:1.95;overflow-x:auto;box-shadow:0 0 40px rgba(0,0,0,0.4)}
+.ck{color:#60a5fa}.cv{color:#22d3ee}.cst{color:#86efac}.cp{color:#c084fc}.cn{color:var(--orange)}.ccm{color:var(--muted);font-style:italic}
+.about-text p{color:var(--muted);margin-bottom:1rem;font-size:.95rem;line-height:1.9}
+.about-meta{margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:.75rem}
+.meta-chip{font-family:var(--mono);font-size:.68rem;padding:.35rem .85rem;border-radius:100px;background:rgba(0,240,255,0.07);color:var(--cyan);border:1px solid rgba(0,240,255,0.2);letter-spacing:.04em}
+#work{padding:7rem 0}
+.project-row{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;margin-bottom:5rem;padding-bottom:5rem;border-bottom:1px solid var(--border)}
+.project-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.project-row.flip{direction:rtl}
+.project-row.flip>*{direction:ltr}
+.proj-visual{background:var(--surface);border:1px solid var(--border2);border-radius:16px;display:flex;align-items:center;justify-content:center;padding:3.5rem;position:relative;overflow:hidden;min-height:220px}
+.proj-visual::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(0,240,255,0.05),transparent 70%)}
+.proj-icon{width:72px;height:72px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2rem;background:rgba(0,0,0,0.5);border:1px solid var(--border2);box-shadow:0 0 30px rgba(0,240,255,0.08)}
+.proj-number{font-family:var(--mono);font-size:.68rem;color:var(--muted);letter-spacing:.1em;margin-bottom:.75rem}
+
+.proj-title{font-size:1.6rem;font-weight:700;color:#fff;margin-bottom:.75rem;line-height:1.2}
+.proj-desc{font-size:.9rem;color:var(--muted);line-height:1.8;margin-bottom:1.25rem}
+.proj-tech{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:1.25rem}
+.tech-tag{font-family:var(--mono);font-size:.62rem;padding:.25rem .65rem;border-radius:4px;background:rgba(0,240,255,0.08);color:var(--cyan);border:1px solid rgba(0,240,255,0.15);letter-spacing:.04em}
+.tech-tag.pur{background:rgba(168,85,247,0.1);color:#c084fc;border-color:rgba(168,85,247,0.2)}
+.tech-tag.grn{background:rgba(52,211,153,0.1);color:#34d399;border-color:rgba(52,211,153,0.2)}
+.proj-link{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.72rem;color:var(--muted);text-decoration:none;letter-spacing:.07em;text-transform:uppercase;transition:color .2s}
+.proj-link:hover{color:var(--cyan)}
+.proj-link svg{width:16px;height:16px}
+#publications{padding:7rem 0}
+.pub-card{background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:2.5rem 3rem;position:relative;overflow:hidden;margin-top:2.5rem}
+.pub-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),#3b82f6,var(--purple))}
+
+.pub-title{font-size:1.8rem;font-weight:700;color:#fff;margin-bottom:.75rem;line-height:1.2}
+.pub-desc{font-size:.92rem;color:var(--muted);line-height:1.85;margin-bottom:1.5rem}
+.kw-pills{display:flex;flex-wrap:wrap;gap:.5rem}
+.kw-pill{font-family:var(--mono);font-size:.62rem;padding:.3rem .75rem;border-radius:100px;background:rgba(52,211,153,0.08);color:var(--green);border:1px solid rgba(52,211,153,0.2);letter-spacing:.04em}
+#skills{padding:7rem 0;overflow:hidden}
+.skill-cloud-wrap{position:relative;height:520px;display:flex;align-items:center;justify-content:center;margin-top:3rem}
+.skill-center{position:absolute;width:64px;height:64px;border-radius:50%;background:rgba(0,240,255,0.12);border:1px solid rgba(0,240,255,0.3);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.55rem;color:var(--cyan);letter-spacing:.05em;text-align:center;box-shadow:0 0 40px rgba(0,240,255,0.15);animation:pring 3s ease-in-out infinite}
+@keyframes pring{0%,100%{box-shadow:0 0 40px rgba(0,240,255,0.15),0 0 0 0 rgba(0,240,255,0.2)}50%{box-shadow:0 0 60px rgba(0,240,255,0.25),0 0 0 20px rgba(0,240,255,0)}}
+.orbit-ring{position:absolute;border-radius:50%;border:1px dashed rgba(255,255,255,0.04)}
+.skill-node{position:absolute;font-family:var(--mono);font-weight:700;padding:.55rem 1rem;border-radius:100px;white-space:nowrap;cursor:default;transition:transform .3s,box-shadow .3s}
+.skill-node:hover{transform:translate(-50%,-50%) scale(1.18)!important;z-index:10}
+#certifications{padding:7rem 0;background:linear-gradient(180deg,transparent,rgba(10,0,26,0.5),transparent)}
+.cert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3rem}
+.cert-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.75rem;transition:border-color .3s,transform .3s;position:relative;overflow:hidden}
+.cert-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 0% 0%,rgba(0,240,255,0.04),transparent 60%);pointer-events:none}
+.cert-card:hover{border-color:rgba(0,240,255,0.25);transform:translateY(-5px)}
+.cert-icon{font-size:1.75rem;margin-bottom:1rem}
+.cert-name{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:.35rem}
+.cert-issuer{font-family:var(--mono);font-size:.68rem;color:var(--cyan);margin-bottom:.75rem;letter-spacing:.04em}
+.cert-desc{font-size:.8rem;color:var(--muted);line-height:1.65}
+#contact{padding:8rem 0 5rem;border-top:1px solid var(--border);text-align:center}
+.contact-head{font-size:clamp(2.5rem,6vw,5rem);font-weight:700;letter-spacing:-.03em;color:#fff;margin-bottom:1rem}
+.contact-head .grad{background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.contact-sub{font-size:1rem;color:var(--muted);margin-bottom:3rem}
+.contact-btn{display:inline-flex;align-items:center;gap:.6rem;padding:1rem 2.5rem;border-radius:8px;background:rgba(0,240,255,0.08);border:1px solid rgba(0,240,255,0.4);color:var(--cyan);font-family:var(--mono);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;font-weight:700;transition:background .25s,color .25s,transform .2s,box-shadow .2s}
+.contact-btn:hover{background:var(--cyan);color:#000;box-shadow:0 0 40px rgba(0,240,255,0.3);transform:translateY(-2px)}
+.social-row{display:flex;align-items:center;justify-content:center;gap:3rem;margin-top:3rem;flex-wrap:wrap}
+.soc-link{color:var(--muted);transition:color .2s, transform .2s;text-decoration:none;display:flex;align-items:center;gap:.5rem}
+.soc-link svg{width:28px;height:28px;transition:stroke-width .2s}
+.soc-link:hover{color:var(--cyan);transform:translateY(-3px)}
+footer{padding:2rem;text-align:center;border-top:1px solid var(--border);position:relative;z-index:2}
+.footer-txt{font-family:var(--mono);font-size:.68rem;color:var(--muted);letter-spacing:.06em}
+.footer-txt span{color:var(--cyan)}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.reveal.on{opacity:1;transform:none}
+@media(max-width:1100px){.side-terminal{display:none}}
+@media(max-width:900px){nav{padding:1rem 1.5rem}.nav-links{gap:1.5rem}.about-grid{grid-template-columns:1fr}.project-row{grid-template-columns:1fr}.project-row.flip{direction:ltr}.cert-grid{grid-template-columns:1fr}.skill-cloud-wrap{height:380px}}
+@media(max-width:600px){.hero-name{font-size:3rem}.nav-links a{font-size:.6rem}.nav-links{gap:1rem}}
+</style>
+</head>
+<body>
+
+<canvas id="cosmos"></canvas>
+<div id="cursor"></div>
+
+<nav>
+  <div class="nav-logo">&lt;SK /&gt;</div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#publications">Research</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="home">
+  <div class="hero-layout">
+    <div class="side-terminal left reveal" data-label="live_server_logs">
+      <div class="terminal-content">
+        <div style="color:var(--green)">[INFO] Request GET /api/v1/user</div>
+        <div style="color:var(--muted)">[DEBUG] Cache hit for UID: 7281</div>
+        <div style="color:var(--orange)">[WARN] Latency threshold > 200ms</div>
+        <div style="color:var(--cyan)">[INFO] Async job: reindexing...</div>
+        <div style="color:var(--green)">[INFO] 200 OK (142ms)</div>
+        <div style="color:var(--purple)">[TRACE] JWT Validation successful</div>
+        <div style="color:var(--green)">[INFO] Request POST /order/create</div>
+        <div style="color:var(--muted)">[DEBUG] Payload: {id: "TXN_99"}</div>
+        <div style="color:var(--green)">[INFO] 201 Created</div>
+        <div style="color:var(--green)">[INFO] Request GET /api/v1/user</div>
+        <div style="color:var(--muted)">[DEBUG] Cache hit for UID: 7281</div>
+        <div style="color:var(--orange)">[WARN] Latency threshold > 200ms</div>
+        <div style="color:var(--cyan)">[INFO] Async job: reindexing...</div>
+      </div>
+    </div>
+
+    <div class="hero-wrap reveal">
+      <div class="terminal-box">
+        <div class="terminal-header">
+          <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
+        </div>
+        <div class="terminal-body"><span id="typed-text"></span><span id="typed-cursor">_</span></div>
+      </div>
+      <h1 class="hero-name">SACHIN<br><span class="grad">KUMAR</span></h1>
+      <p class="hero-sub">Architecting high-concurrency systems &amp; scalable microservices. Passionate about building robust enterprise backend solutions with Java &amp; Spring.</p>
+      <div class="hero-ctas">
+        <a href="#work" class="btn-prim">View Projects →</a>
+        <a href="#contact" class="btn-ghost">Initialize Contact</a>
+      </div>
+    </div>
+
+    <div class="side-terminal right reveal" data-label="db_metrics">
+      <div class="terminal-content">
+        <div style="color:var(--cyan)">POOL_SIZE: 20/50</div>
+        <div style="color:var(--green)">ACTIVE_CONN: 12</div>
+        <div style="color:var(--muted)">QUERY_AVG: 42ms</div>
+        <div style="color:var(--purple)">TX_COMMIT: SUCCESS</div>
+        <div style="color:var(--orange)">DEADLOCKS: 0</div>
+        <div style="color:var(--cyan)">CPU_LOAD: 14.2%</div>
+        <div style="color:var(--green)">HEAP_USAGE: 1.2GB/4GB</div>
+        <div style="color:var(--muted)">GARBAGE_COL: 12ms</div>
+        <div style="color:var(--cyan)">POOL_SIZE: 21/50</div>
+        <div style="color:var(--green)">ACTIVE_CONN: 14</div>
+        <div style="color:var(--cyan)">CPU_LOAD: 15.8%</div>
+        <div style="color:var(--green)">HEAP_USAGE: 1.3GB/4GB</div>
+      </div>
+    </div>
+  </div>
+  <div class="chevron">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+  </div>
+</section>
+
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="mq-item">Java 21</span><span class="mq-item">Spring Boot</span><span class="mq-item">Spring AI</span><span class="mq-item">RAG</span><span class="mq-item">Hibernate</span><span class="mq-item">JPA</span><span class="mq-item">Spring Security</span><span class="mq-item">REST APIs</span><span class="mq-item">PostgreSQL</span><span class="mq-item">Spring MVC</span><span class="mq-item">Ethereum</span><span class="mq-item">Solidity</span><span class="mq-item">Maven</span><span class="mq-item">Spring AOP</span><span class="mq-item">JUnit</span><span class="mq-item">Spring Core</span>
+    <span class="mq-item">Java 21</span><span class="mq-item">Spring Boot</span><span class="mq-item">Spring AI</span><span class="mq-item">RAG</span><span class="mq-item">Hibernate</span><span class="mq-item">JPA</span><span class="mq-item">Spring Security</span><span class="mq-item">REST APIs</span><span class="mq-item">PostgreSQL</span><span class="mq-item">Spring MVC</span><span class="mq-item">Ethereum</span><span class="mq-item">Solidity</span><span class="mq-item">Maven</span><span class="mq-item">Spring AOP</span><span class="mq-item">JUnit</span><span class="mq-item">Spring Core</span>
+  </div>
+</div>
+
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="reveal">
+        <p class="sec-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>01. About_Me</p>
+        <h2 class="sec-title">Building systems that scale.</h2>
+        <div class="about-text">
+          <p>I'm Sachin Kumar, a dedicated Java backend engineer focused on architecting high-concurrency systems and enterprise-grade applications. My expertise spans the full Spring ecosystem — from REST API design to AI-powered backends using Spring AI and RAG pipelines.</p>
+          <p>Beyond the backend, I explore decentralised systems — my research on eVault demonstrates my interest in applying blockchain (Ethereum + Solidity) to solve real-world problems in legal record management.</p>
+          <p>I bring rigour to every layer: clean architecture, secure endpoints, testable code, and production-minded thinking.</p>
+        </div>
+        <div class="about-meta">
+          <span class="meta-chip">Bangalore, India</span>
+          <span class="meta-chip">Backend Engineer</span>
+          <span class="meta-chip">Open to Opportunities</span>
+        </div>
+      </div>
+      <div class="code-block reveal">
+<pre><span class="ck">const</span> <span class="cv">backendEngineer</span> = {
+  <span class="cp">"name"</span>: <span class="cst">"Sachin Kumar"</span>,
+  <span class="cp">"focus"</span>: <span class="cst">"Backend Eng &amp; AI Systems"</span>,
+  <span class="cp">"core_stack"</span>: [
+    <span class="cn">"Java 21"</span>,
+    <span class="cn">"Spring "</span>,
+    <span class="cn">"Spring Boot"</span>,
+    <span class="cn">"PostgreSQL / JPA"</span>
+  ],
+  <span class="cp">"also_knows"</span>: [
+    <span class="cn">"Spring AI"</span>,
+    <span class="cn">"RAG"</span>,
+    <span class="cn">"Vector/Embeddings"</span>
+  ],
+  <span class="cp">"linkedin"</span>: <span class="cst">"sachin-k-dev"</span>,
+  <span class="ccm">// always learning...</span>
+};</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="container">
+    <div class="reveal">
+      <p class="sec-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>02. System_Modules</p>
+      <h2 class="sec-title">Things I've shipped.</h2>
+    </div>
+
+    <div class="project-row reveal" style="margin-top:3.5rem">
+      <div class="proj-visual">
+        <div class="proj-icon">🛒</div>
+      </div>
+      <div>
+        <div class="proj-number">01 — Featured Project</div>
+        <h3 class="proj-title">AI-Powered E-Commerce Engine</h3>
+        <p class="proj-desc">A high-concurrency e-commerce backend with automated order processing and an intelligent RAG-based product search system. Integrates Spring AI with PgVector for semantic search, backed by a Spring Security layer and full CRUD REST APIs over PostgreSQL.</p>
+        <div class="proj-tech">
+          <span class="tech-tag">Java 21</span>
+          <span class="tech-tag">Spring Boot</span>
+          <span class="tech-tag pur">Spring AI</span>
+          <span class="tech-tag pur">RAG</span>
+          <span class="tech-tag pur">PgVector</span>
+          <span class="tech-tag">PostgreSQL</span>
+          <span class="tech-tag">Hibernate</span>
+          <span class="tech-tag">Spring Security</span>
+          <span class="tech-tag">REST APIs</span>
+          <span class="tech-tag">Maven</span>
+          <span class="tech-tag">OpenAI</span>
+        </div>
+        <a href="https://github.com/JDEV-SACHIN-K/ecom-backend" target="_blank" rel="noreferrer" class="proj-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+          View Source Code
+        </a>
+      </div>
+    </div>
+
+    <div class="project-row flip reveal">
+      <div class="proj-visual">
+        <div class="proj-icon" style="background:rgba(168,85,247,0.15);border-color:rgba(168,85,247,0.3);box-shadow:0 0 30px rgba(168,85,247,0.1)">💼</div>
+      </div>
+      <div>
+        <div class="proj-number">02 — Backend Architecture</div>
+        <h3 class="proj-title">Job Application Portal</h3>
+        <p class="proj-desc">Service-oriented full-stack application with clean separation of concerns across Controller, Service, and Repository layers. Features secure authentication via Spring Security, JSP/Tomcat-powered views, and a PostgreSQL backend with full JUnit-tested endpoints.</p>
+        <div class="proj-tech">
+          <span class="tech-tag">Java 21</span>
+          <span class="tech-tag">Spring Boot</span>
+          <span class="tech-tag">Spring MVC</span>
+          <span class="tech-tag">JSP</span>
+          <span class="tech-tag">Tomcat</span>
+          <span class="tech-tag">Maven</span>
+          <span class="tech-tag">Lombok</span>
+          <span class="tech-tag grn">JDBC</span>
+          <span class="tech-tag">PostgreSQL</span>
+          <span class="tech-tag">Spring Security</span>
+          <span class="tech-tag grn">JUnit / Mockito</span>
+          <span class="tech-tag">CSS</span>
+        </div>
+        <a href="https://github.com/JDEV-SACHIN-K/JobApp-backend" target="_blank" rel="noreferrer" class="proj-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+          View Source Code
+        </a>
+      </div>
+    </div>
+
+    <div class="project-row reveal">
+      <div class="proj-visual">
+        <div class="proj-icon" style="background:rgba(52,211,153,0.15);border-color:rgba(52,211,153,0.3);box-shadow:0 0 30px rgba(52,211,153,0.1)">⚙️</div>
+      </div>
+      <div>
+        <div class="proj-number">03 — Infrastructure Module</div>
+        <h3 class="proj-title">Distributed Microservices Ecosystem</h3>
+        <p class="proj-desc">Architecting a resilient, distributed system utilizing Spring Cloud for centralized configuration, service discovery via Eureka, and fault tolerance with Resilience4j circuit breakers. Focuses on inter-service communication through OpenFeign and secure traffic routing via an API Gateway.</p>
+        <div class="proj-tech">
+          <span class="tech-tag">Java 21</span>
+          <span class="tech-tag">Spring Boot</span>
+          <span class="tech-tag pur">Spring Cloud</span>
+          <span class="tech-tag pur">Eureka</span>
+          <span class="tech-tag pur">Config Server</span>
+          <span class="tech-tag">API Gateway</span>
+          <span class="tech-tag">Resilience4j</span>
+          <span class="tech-tag">OpenFeign</span>
+          <span class="tech-tag grn">Docker</span>
+          <span class="tech-tag">PostgreSQL</span>
+        </div>
+        <a href="#" class="proj-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+          Coming Soon
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="publications">
+  <div class="container">
+    <div class="reveal">
+      <p class="sec-label grn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>03. Research</p>
+      <h2 class="sec-title">Published work.</h2>
+    </div>
+    <div class="pub-card reveal">
+      <div class="pub-title">eVault for Legal Records</div>
+      <p class="pub-desc">Designed and developed a secure, decentralised eVault system for legal record management leveraging Ethereum Smart Contracts and IPFS for immutable storage. The system uses cryptographic verification to ensure data integrity, MetaMask for user identity, and a Java SE backend — addressing the critical problem of tamper-proof, accessible legal document storage in the digital age.</p>
+      <div class="kw-pills">
+        <span class="kw-pill">Ethereum</span>
+        <span class="kw-pill">Solidity</span>
+        <span class="kw-pill">Smart Contracts</span>
+        <span class="kw-pill">Java SE</span>
+        <span class="kw-pill">Web3</span>
+        <span class="kw-pill">Cryptography</span>
+        <span class="kw-pill">Blockchain</span>
+        <span class="kw-pill">DApps</span>
+        <span class="kw-pill">IPFS</span>
+        <span class="kw-pill">MetaMask</span>
+        <span class="kw-pill">Ganache</span>
+        <span class="kw-pill">Truffle</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="container">
+    <div class="reveal">
+      <p class="sec-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>04. Tech_Stack</p>
+      <h2 class="sec-title">What I work with.</h2>
+    </div>
+  </div>
+  <div class="skill-cloud-wrap" id="skillCloud">
+    <div class="orbit-ring" style="width:160px;height:160px"></div>
+    <div class="orbit-ring" style="width:300px;height:300px"></div>
+    <div class="orbit-ring" style="width:450px;height:450px"></div>
+    <div class="skill-center">JAVA<br>BACKEND</div>
+  </div>
+</section>
+
+<section id="certifications">
+  <div class="container">
+    <div class="reveal" style="text-align:center">
+      <p class="sec-label" style="justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>05. Verified Expertise</p>
+      <h2 class="sec-title">Core Competencies.</h2>
+    </div>
+    <div class="cert-grid">
+      <div class="cert-card reveal">
+        <div class="cert-icon">⚙️</div>
+        <div class="cert-name">Microservices Architecture</div>
+        <div class="cert-issuer">Project-Based · Distributed Ecosystem</div>
+        <div class="cert-desc">Implementing scalable backend services with centralized config, service discovery, and circuit breakers using Spring Cloud & Resilience4j.</div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">🤖</div>
+        <div class="cert-name">Spring AI & RAG Systems</div>
+        <div class="cert-issuer">Project-Based · E-Commerce Platform</div>
+        <div class="cert-desc">Hands-on implementation of Spring AI with OpenAI integration, PgVector for semantic search, and Retrieval-Augmented Generation pipelines.</div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">⛓️</div>
+        <div class="cert-name">Blockchain & Smart Contracts</div>
+        <div class="cert-issuer">Research · eVault Publication</div>
+        <div class="cert-desc">Original research in decentralised legal record management using Ethereum, Solidity, IPFS, and DApp development. Covers cryptographic verification.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <div class="reveal">
+      <p class="contact-head">Let's <span class="grad">Connect.</span></p>
+      <p class="contact-sub">Have a project, a role, or just want to talk? The connection is open.</p>
+      <a href="mailto:sachin21703@gmail.com" class="contact-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+        Initialize Contact
+      </a>
+      <div class="social-row">
+        <a href="https://github.com/JDEV-SACHIN-K" target="_blank" rel="noreferrer" class="soc-link" title="GitHub">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+        </a>
+        <a href="http://www.linkedin.com/in/sachin-k-dev" target="_blank" rel="noreferrer" class="soc-link" title="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="mailto:sachin21703@gmail.com" class="soc-link" title="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p class="footer-txt">Designed &amp; built by <span>Sachin Kumar</span> · 2026 · Java &amp; Spring Boot</p>
+</footer>
+
+<script>
+/* COSMOS CANVAS */
+(function(){
+  const canvas=document.getElementById('cosmos');
+  const ctx=canvas.getContext('2d');
+  let W,H,particles=[],mouse={x:-999,y:-999};
+  const COLS=[[100,220,255],[160,140,255],[60,200,200],[200,160,255]];
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;init()}
+  function init(){particles=[];const n=Math.floor(W*H/7500);for(let i=0;i<n;i++){const c=COLS[Math.floor(Math.random()*4)];particles.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.38,vy:(Math.random()-.5)*.38,r:Math.random()*1.3+.4,a:Math.random()*.75+.15,cr:c[0],cg:c[1],cb:c[2]})}}
+  function loop(){ctx.clearRect(0,0,W,H);const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#02000a');g.addColorStop(1,'#0a001a');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);for(const p of particles){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;const dx=mouse.x-p.x,dy=mouse.y-p.y,d=Math.sqrt(dx*dx+dy*dy);if(d<185){ctx.beginPath();ctx.strokeStyle='rgba(0,240,255,'+((.22-d/850)).toFixed(3)+')';ctx.lineWidth=.5;ctx.moveTo(p.x,p.y);ctx.lineTo(mouse.x,mouse.y);ctx.stroke()}ctx.beginPath();ctx.fillStyle='rgba('+p.cr+','+p.cg+','+p.cb+','+p.a+')';ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}requestAnimationFrame(loop)}
+  window.addEventListener('resize',resize);
+  window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
+  resize();loop();
+})();
+
+/* CURSOR */
+(function(){
+  const cur=document.getElementById('cursor');
+  let cx=-100,cy=-100,tx=-100,ty=-100;
+  window.addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY});
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>cur.classList.add('big'));
+    el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+  });
+  function anim(){cx+=(tx-cx)*.18;cy+=(ty-cy)*.18;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(anim)}
+  anim();
+})();
+
+/* TYPED TERMINAL - UPDATED TO SSH HANDSHAKE */
+(function(){
+  const el=document.getElementById('typed-text');
+  const lines=['$ ssh sachin@backend-prod','> Initializing key exchange...','> Remote: OpenSSH_9.0 Java_21','> Connection established.','','[ Sachin Kumar ]','Backend & Distributed Systems'];
+  let full=lines.join('\n'),i=0;
+  function type(){el.textContent=full.substring(0,i++);if(i<=full.length)setTimeout(type,i<40?55:20)}
+  type();
+})();
+
+/* SKILL CLOUD */
+(function(){
+  const skills=[
+    {name:'Java 21',r:215,bg:'rgba(251,146,60,0.15)',color:'#fb923c',border:'rgba(251,146,60,0.35)',sz:.76},
+    {name:'Spring Boot',r:215,bg:'rgba(52,211,153,0.15)',color:'#34d399',border:'rgba(52,211,153,0.35)',sz:.76},
+    {name:'Spring AI',r:215,bg:'rgba(196,84,252,0.15)',color:'#c084fc',border:'rgba(196,84,252,0.35)',sz:.76},
+    {name:'RAG',r:215,bg:'rgba(52,211,153,0.12)',color:'#6ee7b7',border:'rgba(52,211,153,0.25)',sz:.76},
+    {name:'PostgreSQL',r:215,bg:'rgba(99,102,241,0.15)',color:'#818cf8',border:'rgba(99,102,241,0.3)',sz:.76},
+    {name:'Hibernate',r:215,bg:'rgba(251,191,36,0.12)',color:'#fbbf24',border:'rgba(251,191,36,0.3)',sz:.76},
+    {name:'REST APIs',r:215,bg:'rgba(0,240,255,0.1)',color:'#00f0ff',border:'rgba(0,240,255,0.25)',sz:.76},
+    {name:'Spring Security',r:215,bg:'rgba(52,211,153,0.12)',color:'#34d399',border:'rgba(52,211,153,0.3)',sz:.76},
+    {name:'Ethereum',r:140,bg:'rgba(156,163,175,0.12)',color:'#9ca3af',border:'rgba(156,163,175,0.3)',sz:.7},
+    {name:'Solidity',r:140,bg:'rgba(100,116,139,0.15)',color:'#94a3b8',border:'rgba(100,116,139,0.3)',sz:.7},
+    {name:'Spring AOP',r:140,bg:'rgba(52,211,153,0.1)',color:'#6ee7b7',border:'rgba(52,211,153,0.25)',sz:.7},
+    {name:'Thymeleaf',r:140,bg:'rgba(22,163,74,0.12)',color:'#4ade80',border:'rgba(22,163,74,0.25)',sz:.7},
+    {name:'JUnit/Mockito',r:140,bg:'rgba(239,68,68,0.12)',color:'#f87171',border:'rgba(239,68,68,0.25)',sz:.7},
+    {name:'Spring Core',r:140,bg:'rgba(20,184,166,0.12)',color:'#2dd4bf',border:'rgba(20,184,166,0.25)',sz:.7},
+    {name:'Maven & Lombok',r:65,bg:'rgba(239,68,68,0.1)',color:'#fca5a5',border:'rgba(239,68,68,0.2)',sz:.64},
+    {name:'Spring Cloud',r:65,bg:'rgba(59,130,246,0.12)',color:'#60a5fa',border:'rgba(59,130,246,0.25)',sz:.64}
+  ];
+
+  const byR={};
+  skills.forEach(s=>{if(!byR[s.r])byR[s.r]=[];byR[s.r].push(s)});
+  const wrap=document.getElementById('skillCloud');
+  const styleEl=document.createElement('style');
+
+  for(const [radius,group] of Object.entries(byR)){
+    const r=parseInt(radius),n=group.length;
+    group.forEach((s,idx)=>{
+      const angle=(idx/n)*Math.PI*2-Math.PI/2;
+      const x=Math.cos(angle)*r;
+      const y=Math.sin(angle)*r;
+      const animName='of'+Math.random().toString(36).slice(2,6);
+      styleEl.textContent+=`@keyframes ${animName}{from{transform:translate(-50%,-50%) translateY(0)}to{transform:translate(-50%,-50%) translateY(-8px)}}`;
+      const node=document.createElement('div');
+      node.className='skill-node';
+      node.textContent=s.name;
+      node.style.cssText=`left:calc(50% + ${x}px);top:calc(50% + ${y}px);transform:translate(-50%,-50%);background:${s.bg};color:${s.color};border:1px solid ${s.border};box-shadow:0 0 16px ${s.bg};font-size:${s.sz}rem;animation:${animName} ${3.5+idx*.4}s ease-in-out ${idx*.22}s infinite alternate`;
+      wrap.appendChild(node);
+    });
+  }
+  document.head.appendChild(styleEl);
+})();
+
+/* SCROLL REVEAL */
+(function(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('on'),i*80);obs.unobserve(e.target)}});
+  },{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+})();
+</script>
+</body>
+</html>
